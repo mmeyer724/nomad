@@ -52,7 +52,7 @@ func (*consulSockHook) Name() string {
 func (h *consulSockHook) shouldRun() bool {
 	tg := h.alloc.Job.LookupTaskGroup(h.alloc.TaskGroup)
 	for _, s := range tg.Services {
-		if s.Connect != nil {
+		if s.Connect.HasSidecar() {
 			return true
 		}
 	}
@@ -168,6 +168,8 @@ func (s *sockProxy) run(alloc *structs.Allocation) error {
 				"unable to remove existing unix socket for Consul gRPC endpoint: %v", err)
 		}
 	}
+
+	fmt.Printf("## UNIX SOCKET PATH: %s\n", hostGRPCSockPath)
 
 	listener, err := net.Listen("unix", hostGRPCSockPath)
 	if err != nil {

@@ -128,13 +128,12 @@ func (tr *TaskRunner) initHooks() {
 		}
 
 		if task.Kind.IsConnectProxy() {
-			// envoy bootstrap must execute after sidsHook maybe sets SI token
 			tr.runnerHooks = append(tr.runnerHooks, newEnvoyBootstrapHook(
 				newEnvoyBootstrapHookConfig(alloc, tr.clientConfig.ConsulConfig, hookLogger),
 			))
 		} else if task.Kind.IsConnectNative() {
 			tr.runnerHooks = append(tr.runnerHooks, newConnectNativeHook(
-				newConnectNativeHookConfig(alloc, tr.clientConfig.ConsulConfig, tr.logger),
+				newConnectNativeHookConfig(alloc, tr.clientConfig.ConsulConfig, hookLogger),
 			))
 		}
 	}
